@@ -1,27 +1,24 @@
-# dic_file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'dictionary.txt'))
-# code = { "2" => "ABC", "3" => "DEF", "4" => "GHI", "5" => "JKL", "6" => "MNO", "7" => "PQRS", "8" => "TUV", "9" => "WXYZ" }
-# number = "0508812218"
-# words = File.open(dic_file).select { |w| w =~ /^\w+$/ }.map(&:chomp)
-# new_array_words = words.map{|x| x.scan(/[A-Za-z]+?/)}
-# letters =('a'..'z').to_a
-# a={}
-# i=0
-# k=0
-# while i<=26 do
-#   words.each do |w|
-#     if w[k] == letters[i]
-#       a[letters[i]] << w[k]
-#     end
-#   end
-#   i = i+1
-# end
-file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'd.txt'))
+file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'dictionary.txt'))
 words = File.open(file).select { |w| w =~ /^\w+$/ }.map(&:chomp)
-dictionary = words.group_by{|i| i[0].downcase}
+d = words.group_by{|i| i[0].downcase}
+
+
+dictionary = words.group_by{|i| i[index].downcase}
+letters =('a'..'z').to_a
+for i in letters
+  res[i] = res[i].group_by{|i| i[index+1].downcase} unless res[i].nil?
+end
 
 module PhoneConverter
   dic_file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'dictionary.txt'))
+  WORDS = File.open(file).select { |w| w =~ /^\w+$/ }.map(&:chomp)
   CHARS_MAP = {"2" => "ABC", "3" => "DEF", "4" => "GHI", "5" => "JKL", "6" => "MNO", "7" => "PQRS", "8" => "TUV", "9" => "WXYZ" }
+
+  def dictionary(array, index = 0)
+    res = array.group_by{|i| i[index].downcase}
+    letters =('a'..'z').to_a
+    dictionary(res[letters[index]], (index + 1))
+  end
 
   def self.convert(phone)
     [].tap do |mem|
