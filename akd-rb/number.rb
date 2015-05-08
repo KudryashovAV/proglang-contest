@@ -37,3 +37,18 @@ module PhoneConverter
 end
 
 puts PhoneConverter.convert('588')
+
+
+
+
+def add_word(word, hash)
+  new_place = word.chars.reduce(hash) {|acc, v| acc[v] ||= {}; acc[v]}
+  new_place[:end] = word
+  hash
+end
+
+
+def get_words(start, hash)
+  place = start.chars.reduce(hash) {|acc, v| acc[v] if acc}
+  place ? [place[:end]] + place.flat_map {|k, v| get_words("", v) unless k == :end} : []
+end
